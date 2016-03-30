@@ -5,7 +5,7 @@
     on-refresh="doRefresh()"></ion-refresher>
     <ion-list>
       <ion-item ng-repeat="poem in poems" href="#/app/poem/{{poem.id}}/{{poet.id}}">
-        {{poem.name}}
+          <p style="direction:{{poet.lang.toUpperCase() == 'AR' ? 'rtl' : 'ltr'}}">{{poem.name}}</p>
       </ion-item>
     </ion-list>
   </ion-content>

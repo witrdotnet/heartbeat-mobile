@@ -1,9 +1,10 @@
 <ion-view view-title="{{poet.name}} :{{poem.name}}">
   <ion-content>
-      <p>{{poem.name}}</p>
-      <ul ng-repeat="(id, verse) in poem.verses">
-          <li>
-            {{verse.text}}
+      <center><h1>{{poem.name}}</h1></center>
+      <hr/>
+      <ul style="direction:{{poet.lang.toUpperCase() == 'AR' ? 'rtl' : 'ltr'}}">
+          <li ng-repeat="(id, verse) in poem.verses">
+              <p style="padding-left: 10px;padding-right: 10px">{{verse.text}}</p>
           </li>
       </ul>
   </ion-content>
