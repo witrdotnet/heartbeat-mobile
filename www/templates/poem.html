@@ -1,5 +1,10 @@
-<ion-view view-title="Poem">
+<ion-view view-title="{{poet.name}} :{{poem.name}}">
   <ion-content>
-      <h1>{{poem.name}}</h1>
+      <p>{{poem.name}}</p>
+      <ul ng-repeat="(id, verse) in poem.verses">
+          <li>
+            {{verse.text}}
+          </li>
+      </ul>
   </ion-content>
 </ion-view>

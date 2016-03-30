@@ -62,7 +62,6 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PoemlistsCtrl', function($scope, $stateParams, Poets, Poems) {
-  
   $scope.poet = Poets.get($stateParams.poetId);
             
   Poems.all($stateParams.poetId).then(function(resp){
@@ -83,8 +82,9 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PoemCtrl', function($scope, $stateParams, Poems) {
+.controller('PoemCtrl', function($scope, $stateParams, Poets, Poems) {
     
+  $scope.poet = Poets.get($stateParams.poetId);
   $scope.poem = Poems.get($stateParams.poemId);
   
 })

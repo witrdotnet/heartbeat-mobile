@@ -71,7 +71,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   })
   
   .state('app.poem', {
-    url: '/poem/:poemId',
+    url: '/poem/:poemId/:poetId',
     views: {
       'menuContent': {
         templateUrl: 'templates/poem.html',

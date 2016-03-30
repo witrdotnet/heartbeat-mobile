@@ -31,10 +31,11 @@ angular.module('starter.services', [])
     },
     get: function(poetId) {
       for (var i = 0; i < poets.length; i++) {
-        if (poets[i].id === parseInt(poetId)) {
+        if (parseInt(poets[i].id) === parseInt(poetId)) {
           return poets[i];
         }
       }
+      alert('poet :( not found');
       return null;
     }
   };
@@ -54,10 +55,11 @@ angular.module('starter.services', [])
     },
     get: function(poemId) {
       for (var i = 0; i < poems.length; i++) {
-        if (poems[i].id === parseInt(poemId)) {
+        if (parseInt(poems[i].id) === parseInt(poemId)) {
           return poems[i];
         }
       }
+      alert('poet :( not found');
       return null;
     }
   };
