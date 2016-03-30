@@ -1,0 +1,13 @@
+<ion-view view-title="Settings">
+  <ion-content>
+    <ion-list>
+    <ion-toggle  ng-model="settings.enableSyncing">
+        Enable Syncing
+    </ion-toggle>
+<label class="item item-input">
+  <span class="input-label">Server</span>
+  <input type="text" ng-model="settings.syncingServerUrl" ng-change="onSyncingServerUrlChange()">
+</label>
+    </ion-list>
+  </ion-content>
+</ion-view>

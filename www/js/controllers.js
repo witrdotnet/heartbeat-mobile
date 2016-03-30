@@ -41,16 +41,57 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+.controller('PoetlistsCtrl', function($scope, Poets) {
+    
+  Poets.all().then(function(resp){
+      console.log(JSON.stringify(resp.data));
+      Poets.set(resp.data);
+      $scope.poets = resp.data;
+  });
+  $scope.doRefresh = function() {
+    Poets.all().then(function(resp){
+        console.log(JSON.stringify(resp.data));
+        Poets.set(resp.data);
+        $scope.poets = resp.data;
+    })
+    .finally(function() {
+       // Stop the ion-refresher from spinning
+       $scope.$broadcast('scroll.refreshComplete');
+     });
+  };
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('PoemlistsCtrl', function($scope, $stateParams, Poets, Poems) {
+  
+  $scope.poet = Poets.get($stateParams.poetId);
+            
+  Poems.all($stateParams.poetId).then(function(resp){
+      console.log(JSON.stringify(resp.data));
+      Poems.set(resp.data);
+      $scope.poems = resp.data;
+  });
+  $scope.doRefresh = function() {
+    Poems.all($stateParams.poetId).then(function(resp){
+        console.log(JSON.stringify(resp.data));
+        Poems.set(resp.data);
+        $scope.poems = resp.data;
+    })
+    .finally(function() {
+       // Stop the ion-refresher from spinning
+       $scope.$broadcast('scroll.refreshComplete');
+     });
+  };
+})
+
+.controller('PoemCtrl', function($scope, $stateParams, Poems) {
+    
+  $scope.poem = Poems.get($stateParams.poemId);
+  
+})
+
+.controller('SettingsCtrl', function($scope, Settings) {
+  $scope.settings = Settings.all();
+  $scope.onSyncingServerUrlChange = function() {
+    Settings.setSyncingServerUrl($scope.settings.syncingServerUrl);  
+  };
 });

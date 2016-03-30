@@ -1,5 +1,12 @@
-<ion-view view-title="Playlist">
+<ion-view view-title="{{poet.name}}">
   <ion-content>
-    <h1>Playlist</h1>
+    <ion-refresher
+    pulling-text="Pull to refresh..."
+    on-refresh="doRefresh()"></ion-refresher>
+    <ion-list>
+      <ion-item ng-repeat="poem in poems" href="#/app/poem/{{poem.id}}">
+        {{poem.name}}
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>
