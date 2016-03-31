@@ -50,21 +50,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         }
       }
     })
-    .state('app.playlists', {
-      url: '/playlists',
+    .state('app.poets', {
+      url: '/poets',
       views: {
         'menuContent': {
-          templateUrl: 'templates/playlists.html',
+          templateUrl: 'templates/poets.html',
           controller: 'PoetlistsCtrl'
         }
       }
     })
 
   .state('app.single', {
-    url: '/playlists/:poetId',
+    url: '/poets/:poetId',
     views: {
       'menuContent': {
-        templateUrl: 'templates/playlist.html',
+        templateUrl: 'templates/poems.html',
         controller: 'PoemlistsCtrl'
       }
     }
@@ -81,7 +81,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   });
 
     // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/poets');
   
   if (!$httpProvider.defaults.headers.get) {
     $httpProvider.defaults.headers.get = {};
