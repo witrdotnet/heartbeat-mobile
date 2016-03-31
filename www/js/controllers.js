@@ -41,16 +41,26 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PoetlistsCtrl', function($scope, Poets) {
-    
-  Poets.all().then(function(resp){
-      console.log(JSON.stringify(resp.data));
-      Poets.set(resp.data);
-      $scope.poets = resp.data;
-  });
+.controller('PoetlistsCtrl', function($scope, Poets, DataStore) {
+
+  poets = DataStore.getObject('poets');
+  if (poets !== null) {
+    console.log(JSON.stringify(poets));
+    Poets.set(poets);
+    $scope.poets = poets;
+  } else {
+    Poets.all().then(function(resp){
+        console.log(JSON.stringify(resp.data));
+        DataStore.setObject('poets', resp.data);
+        Poets.set(resp.data);
+        $scope.poets = resp.data;
+    });
+  }
+
   $scope.doRefresh = function() {
     Poets.all().then(function(resp){
         console.log(JSON.stringify(resp.data));
+        DataStore.setObject('poets', resp.data);
         Poets.set(resp.data);
         $scope.poets = resp.data;
     })

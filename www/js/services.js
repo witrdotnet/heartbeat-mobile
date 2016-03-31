@@ -12,7 +12,7 @@ angular.module('starter.services', [])
       $window.localStorage[key] = JSON.stringify(value);
     },
     getObject: function(key) {
-      return JSON.parse($window.localStorage[key] || '{}');
+      return JSON.parse($window.localStorage[key] || 'null');
     }
   }
 }])
@@ -59,7 +59,7 @@ angular.module('starter.services', [])
           return poems[i];
         }
       }
-      alert('poet :( not found');
+      alert('poem :( not found');
       return null;
     }
   };
