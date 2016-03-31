@@ -4,10 +4,24 @@
     <ion-toggle  ng-model="settings.enableSyncing">
         Enable Syncing
     </ion-toggle>
+
 <label class="item item-input">
   <span class="input-label">Server</span>
   <input type="text" ng-model="settings.syncingServerUrl" ng-change="onSyncingServerUrlChange()">
 </label>
+
+<label class="item item-input">
+    <span class="input-label">Language</span>
+    <ion-list>
+      <ion-radio ng-repeat="lang in languages"
+               ng-value="lang.code"
+               ng-model="settings.lang"
+               ng-change="onLangChange(lang)">
+        {{ lang.label }}
+      </ion-radio>
+    </ion-list>
+</label>
+
     </ion-list>
   </ion-content>
 </ion-view>

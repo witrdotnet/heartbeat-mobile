@@ -68,10 +68,12 @@ angular.module('starter.services', [])
 .factory('Settings', function(DataStore) {
   var settings = {
     enableSyncing: true,
-    syncingServerUrl: ''
+    syncingServerUrl: '',
+    lang: ''
   };
   
   settings.syncingServerUrl = DataStore.get('syncingServerUrl', 'http://witr.net/heartbeat/api/hb.php/hbcore/');
+  settings.lang = DataStore.get('lang', 'ar');
   
   return {
     all: function() {
@@ -85,7 +87,14 @@ angular.module('starter.services', [])
     },
     setSyncingServerUrl: function(url) {
         settings.syncingServerUrl = url;
-        DataStore.set('syncingServerUrl', url)
+        DataStore.set('syncingServerUrl', url);
+    },
+    getLang: function() {
+        return settings.lang;
+    },
+    setLang: function(lang) {
+        settings.lang = lang;
+        DataStore.set('lang', lang);
     }
   };
 });

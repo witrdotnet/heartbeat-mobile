@@ -41,8 +41,10 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PoetlistsCtrl', function($scope, Poets, DataStore) {
+.controller('PoetlistsCtrl', function($scope, Poets, DataStore, Settings) {
 
+  $scope.selectedLang = Settings.getLang();
+  
   poets = DataStore.getObject('poets');
   if (poets !== null) {
     console.log(JSON.stringify(poets));
@@ -99,9 +101,24 @@ angular.module('starter.controllers', [])
   
 })
 
-.controller('SettingsCtrl', function($scope, Settings) {
+.controller('SettingsCtrl', function($scope, $ionicHistory, Settings) {
   $scope.settings = Settings.all();
+  
   $scope.onSyncingServerUrlChange = function() {
     Settings.setSyncingServerUrl($scope.settings.syncingServerUrl);  
   };
+
+  $scope.languages = [
+    { label: "عربي", code: "ar" },
+    { label: "Français", code: "fr" },
+    { label: "English", code: "en" }
+  ];
+
+  $scope.onLangChange = function(lang) {
+    if (lang !== Settings.getLang()) {
+        $ionicHistory.clearCache();
+    }
+    Settings.setLang(lang.code);  
+  };
+
 });

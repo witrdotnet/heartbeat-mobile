@@ -4,7 +4,7 @@
     pulling-text="Pull to refresh..."
     on-refresh="doRefresh()"></ion-refresher>
     <ion-list>
-      <ion-item ng-repeat="poet in poets" href="#/app/poets/{{poet.id}}">
+      <ion-item ng-repeat="poet in poets | filter:{lang:selectedLang}" href="#/app/poets/{{poet.id}}">
           <center>{{poet.name}}</center>
       </ion-item>
     </ion-list>
