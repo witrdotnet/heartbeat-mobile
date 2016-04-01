@@ -1,11 +1,11 @@
 <ion-view view-title="{{poet.name}}">
   <ion-content>
     <ion-refresher
-    pulling-text="Pull to refresh..."
-    on-refresh="doRefresh()"></ion-refresher>
+      pulling-text="Pull to refresh..."
+      on-refresh="doRefresh()"></ion-refresher>
     <ion-list>
       <ion-item ng-repeat="poem in poems" href="#/app/poem/{{poem.id}}/{{poet.id}}">
-          <p style="direction:{{poet.lang.toUpperCase() == 'AR' ? 'rtl' : 'ltr'}}">{{poem.name}}</p>
+        <p style="direction:{{poet.lang.toUpperCase() == 'AR' ? 'rtl' : 'ltr'}}">{{poem.name}}</p>
       </ion-item>
     </ion-list>
   </ion-content>
