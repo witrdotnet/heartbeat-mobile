@@ -42,9 +42,7 @@ angular.module('starter.controllers', [])
   })
 
   .controller('PoetlistsCtrl', function ($scope, Poets, DataStore, Settings) {
-
     $scope.selectedLang = Settings.getLang();
-
     poets = DataStore.getObject('poets');
     if (poets !== null) {
       console.log(JSON.stringify(poets));
@@ -73,17 +71,26 @@ angular.module('starter.controllers', [])
     };
   })
 
-  .controller('PoemlistsCtrl', function ($scope, $stateParams, Poets, Poems) {
+  .controller('PoemlistsCtrl', function ($scope, $stateParams, Poets, Poems, DataStore) {
     $scope.poet = Poets.get($stateParams.poetId);
+    poems = DataStore.getObject('poems_of_'+$stateParams.poetId);
+    if (poems !== null) {
+      console.log(JSON.stringify(poems));
+      Poems.set(poems);
+      $scope.poems = poems;
+    } else {
+      Poems.all($stateParams.poetId).then(function (resp) {
+        console.log(JSON.stringify(resp.data));
+        DataStore.setObject('poems_of_'+$stateParams.poetId, resp.data);
+        Poems.set(resp.data);
+        $scope.poems = resp.data;
+      });
+    }
 
-    Poems.all($stateParams.poetId).then(function (resp) {
-      console.log(JSON.stringify(resp.data));
-      Poems.set(resp.data);
-      $scope.poems = resp.data;
-    });
     $scope.doRefresh = function () {
       Poems.all($stateParams.poetId).then(function (resp) {
         console.log(JSON.stringify(resp.data));
+        DataStore.setObject('poems_of_'+$stateParams.poetId, resp.data);
         Poems.set(resp.data);
         $scope.poems = resp.data;
       })
