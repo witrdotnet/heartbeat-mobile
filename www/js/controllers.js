@@ -43,37 +43,67 @@ angular.module('starter.controllers', [])
 
   .controller('PoetlistsCtrl', function ($scope, Poets, DataStore, Settings) {
     $scope.selectedLang = Settings.getLang();
-    poets = DataStore.getObject('poets');
-    if (poets !== null) {
-      console.log(JSON.stringify(poets));
+    $scope.noMoreItemsAvailable = false;
+
+    poets = null;
+    poetsLang = null;
+    lastLoadedPoetsIndex = 0;
+
+    Poets.all().then(function (resp) {
+      console.log("poets: " + JSON.stringify(resp.data));
+      DataStore.setObject('poets', resp.data);
+      poets = resp.data;
       Poets.set(poets);
-      $scope.poets = poets;
-    } else {
-      Poets.all().then(function (resp) {
-        console.log(JSON.stringify(resp.data));
-        DataStore.setObject('poets', resp.data);
-        Poets.set(resp.data);
-        $scope.poets = resp.data;
+      poetsLang = poets.filter(function (poet) {
+        return poet.lang.toLowerCase() === $scope.selectedLang;
       });
-    }
+
+      $scope.poets = [];
+      if (poetsLang !== null && poetsLang.length > 0) {
+        $scope.poets.push.apply($scope.poets, poetsLang.slice(0, 50));
+        lastLoadedPoetsIndex = 50;
+      }
+    });
+
+    $scope.loadMore = function () {
+      if (poetsLang !== null && poetsLang.length > 0) {
+        if (lastLoadedPoetsIndex < poetsLang.length) {
+          $scope.poets.push.apply($scope.poets, poetsLang.slice(lastLoadedPoetsIndex, lastLoadedPoetsIndex + 50));
+          lastLoadedPoetsIndex += 50;
+        } else {
+          $scope.noMoreItemsAvailable = true;
+        }
+      }
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+    };
 
     $scope.doRefresh = function () {
-      Poets.all().then(function (resp) {
-        console.log(JSON.stringify(resp.data));
+      Poets.all(true).then(function (resp) {
+        console.log("poets: " + JSON.stringify(resp.data));
         DataStore.setObject('poets', resp.data);
-        Poets.set(resp.data);
-        $scope.poets = resp.data;
+        poets = resp.data;
+        Poets.set(poets);
+        poetsLang = poets.filter(function (poet) {
+          return poet.lang.toLowerCase() === $scope.selectedLang;
+        });
+
+        $scope.poets = [];
+        if (poetsLang !== null && poetsLang.length > 0) {
+          $scope.poets.push.apply($scope.poets, poetsLang.slice(0, 50));
+          lastLoadedPoetsIndex = 50;
+        }
       })
         .finally(function () {
           // Stop the ion-refresher from spinning
           $scope.$broadcast('scroll.refreshComplete');
         });
     };
+
   })
 
   .controller('PoemlistsCtrl', function ($scope, $stateParams, Poets, Poems, DataStore) {
     $scope.poet = Poets.get($stateParams.poetId);
-    poems = DataStore.getObject('poems_of_'+$stateParams.poetId);
+    poems = DataStore.getObject('poems_of_' + $stateParams.poetId);
     if (poems !== null) {
       console.log(JSON.stringify(poems));
       Poems.set(poems);
@@ -81,7 +111,7 @@ angular.module('starter.controllers', [])
     } else {
       Poems.all($stateParams.poetId).then(function (resp) {
         console.log(JSON.stringify(resp.data));
-        DataStore.setObject('poems_of_'+$stateParams.poetId, resp.data);
+        DataStore.setObject('poems_of_' + $stateParams.poetId, resp.data);
         Poems.set(resp.data);
         $scope.poems = resp.data;
       });
@@ -90,7 +120,7 @@ angular.module('starter.controllers', [])
     $scope.doRefresh = function () {
       Poems.all($stateParams.poetId).then(function (resp) {
         console.log(JSON.stringify(resp.data));
-        DataStore.setObject('poems_of_'+$stateParams.poetId, resp.data);
+        DataStore.setObject('poems_of_' + $stateParams.poetId, resp.data);
         Poems.set(resp.data);
         $scope.poems = resp.data;
       })

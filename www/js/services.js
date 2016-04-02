@@ -17,11 +17,19 @@ angular.module('starter.services', [])
       }
     }])
 
-  .factory('Poets', function ($http, $q, $timeout, Settings) {
+  .factory('Poets', function ($http, $q, Settings, DataStore) {
     var poets = null;
     return {
-      all: function () {
-        return $http.get(Settings.getSyncingServerUrl() + 'poets');
+      all: function (forceReloadFromServer) {
+        reloadFromServer = forceReloadFromServer || false;
+        poets = DataStore.getObject('poets');
+        if (!reloadFromServer && poets !== null) {
+          var defer = $q.defer();
+          defer.resolve({"data": poets});
+          return defer.promise;
+        } else {
+          return $http.get(Settings.getSyncingServerUrl() + 'poets');
+        }
       },
       set: function (jsonArr) {
         poets = jsonArr;
