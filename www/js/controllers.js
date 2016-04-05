@@ -1,6 +1,17 @@
 angular.module('starter.controllers', [])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, Settings) {
+
+    $scope.settings = Settings.all();
+    $scope.onSearchValueChange = function () {
+      Settings.setSearchValue($scope.settings.searchValue);
+      $scope.$broadcast('searchValueChange', $scope.settings.searchValue);
+    };
+    $scope.resetSearchValue = function () {
+      $scope.settings.searchValue = '';
+      Settings.setSearchValue($scope.settings.searchValue);
+      $scope.$broadcast('searchValueChange', $scope.settings.searchValue);
+    };
 
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
@@ -47,6 +58,7 @@ angular.module('starter.controllers', [])
 
     poets = null;
     poetsLang = null;
+    poetsToDisplay = null;
     lastLoadedPoetsIndex = 0;
 
     Poets.all().then(function (resp) {
@@ -57,18 +69,23 @@ angular.module('starter.controllers', [])
       poetsLang = poets.filter(function (poet) {
         return poet.lang.toLowerCase() === $scope.selectedLang;
       });
-
-      $scope.poets = [];
-      if (poetsLang !== null && poetsLang.length > 0) {
-        $scope.poets.push.apply($scope.poets, poetsLang.slice(0, 50));
-        lastLoadedPoetsIndex = 50;
-      }
+      poetsToDisplay = poetsLang;
+      initDisplayPoets();
     });
 
+    initDisplayPoets = function () {
+      $scope.poets = [];
+      lastLoadedPoetsIndex = 0;
+      if (poetsToDisplay !== null && poetsToDisplay.length > 0) {
+        $scope.poets.push.apply($scope.poets, poetsToDisplay.slice(0, 50));
+        lastLoadedPoetsIndex = 50;
+      }
+    };
+
     $scope.loadMore = function () {
-      if (poetsLang !== null && poetsLang.length > 0) {
-        if (lastLoadedPoetsIndex < poetsLang.length) {
-          $scope.poets.push.apply($scope.poets, poetsLang.slice(lastLoadedPoetsIndex, lastLoadedPoetsIndex + 50));
+      if (poetsToDisplay !== null && poetsToDisplay.length > 0) {
+        if (lastLoadedPoetsIndex < poetsToDisplay.length) {
+          $scope.poets.push.apply($scope.poets, poetsToDisplay.slice(lastLoadedPoetsIndex, lastLoadedPoetsIndex + 50));
           lastLoadedPoetsIndex += 50;
         } else {
           $scope.noMoreItemsAvailable = true;
@@ -86,18 +103,25 @@ angular.module('starter.controllers', [])
         poetsLang = poets.filter(function (poet) {
           return poet.lang.toLowerCase() === $scope.selectedLang;
         });
-
-        $scope.poets = [];
-        if (poetsLang !== null && poetsLang.length > 0) {
-          $scope.poets.push.apply($scope.poets, poetsLang.slice(0, 50));
-          lastLoadedPoetsIndex = 50;
-        }
+        poetsToDisplay = poetsLang;
+        initDisplayPoets();
       })
         .finally(function () {
           // Stop the ion-refresher from spinning
           $scope.$broadcast('scroll.refreshComplete');
         });
     };
+
+    $scope.$on('searchValueChange', function (evt, q) {
+      if (q.trim() === '') {
+        poetsToDisplay = poetsLang;
+      } else {
+        poetsToDisplay = poetsLang.filter(function (poet) {
+          return poet.name.toLowerCase().indexOf(q.trim().toLowerCase()) > -1;
+        });
+      }
+      initDisplayPoets();
+    });
 
   })
 

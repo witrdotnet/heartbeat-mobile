@@ -77,7 +77,8 @@ angular.module('starter.services', [])
     var settings = {
       enableSyncing: true,
       syncingServerUrl: '',
-      lang: ''
+      lang: '',
+      searchValue: ''
     };
 
     settings.syncingServerUrl = DataStore.get('syncingServerUrl', 'http://witr.net/heartbeat/api/hb.php/hbcore/');
@@ -103,6 +104,13 @@ angular.module('starter.services', [])
       setLang: function (lang) {
         settings.lang = lang;
         DataStore.set('lang', lang);
+      },
+      getSearchValue: function () {
+        return settings.searchValue;
+      },
+      setSearchValue: function (searchValue) {
+        settings.searchValue = searchValue;
+        DataStore.set('searchValue', searchValue);
       }
     };
   });
