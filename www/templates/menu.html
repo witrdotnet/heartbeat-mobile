@@ -54,6 +54,14 @@
             <button class="button button-icon icon ion-backspace" ng-click="resetSearchValue()"></button>
           </div>
         </ion-item>
+
+        <ion-radio ng-repeat="lang in languages"
+                   ng-value="lang.code"
+                   ng-model="settings.lang"
+                   ng-change="onLangChange(lang)">
+          {{ lang.label}}
+        </ion-radio>
+
       </ion-list>
     </ion-content>
   </ion-side-menu>

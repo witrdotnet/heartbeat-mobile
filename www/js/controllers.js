@@ -13,6 +13,19 @@ angular.module('starter.controllers', [])
       $scope.$broadcast('searchValueChange', $scope.settings.searchValue);
     };
 
+    $scope.languages = [
+      {label: "عربي", code: "ar"},
+      {label: "Français", code: "fr"},
+      {label: "English", code: "en"}
+    ];
+
+    $scope.onLangChange = function (lang) {
+      if (lang !== Settings.getLang()) {
+        $scope.$broadcast('langChange', $scope.settings.lang);
+      }
+      Settings.setLang(lang.code);
+    };
+
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
@@ -112,6 +125,15 @@ angular.module('starter.controllers', [])
         });
     };
 
+    $scope.$on('langChange', function (evt, newLang) {
+      $scope.selectedLang = Settings.getLang();
+      poetsLang = poets.filter(function (poet) {
+        return poet.lang.toLowerCase() === $scope.selectedLang;
+      });
+      poetsToDisplay = poetsLang;
+      initDisplayPoets();
+    });
+
     $scope.$on('searchValueChange', function (evt, q) {
       if (q.trim() === '') {
         poetsToDisplay = poetsLang;
@@ -167,19 +189,6 @@ angular.module('starter.controllers', [])
 
     $scope.onSyncingServerUrlChange = function () {
       Settings.setSyncingServerUrl($scope.settings.syncingServerUrl);
-    };
-
-    $scope.languages = [
-      {label: "عربي", code: "ar"},
-      {label: "Français", code: "fr"},
-      {label: "English", code: "en"}
-    ];
-
-    $scope.onLangChange = function (lang) {
-      if (lang !== Settings.getLang()) {
-        $ionicHistory.clearCache();
-      }
-      Settings.setLang(lang.code);
     };
 
   });
