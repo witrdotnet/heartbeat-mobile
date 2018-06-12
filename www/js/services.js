@@ -35,12 +35,13 @@ angular.module('starter.services', [])
         poets = jsonArr;
       },
       remove: function (poet) {
-        poets.splice(poets.indexOf(poet), 1);
+        poets.items.splice(poets.items.indexOf(poet), 1);
       },
       get: function (poetId) {
-        for (var i = 0; i < poets.length; i++) {
-          if (parseInt(poets[i].id) === parseInt(poetId)) {
-            return poets[i];
+        console.log("getPoet poetId:" + poetId +  " from:" + poets);
+        for (var i = 0; i < poets.items.length; i++) {
+          if (parseInt(poets.items[i].poetId) === parseInt(poetId)) {
+            return poets.items[i];
           }
         }
         alert('poet :( not found');
@@ -53,7 +54,7 @@ angular.module('starter.services', [])
     var poems = null;
     return {
       all: function ($poetId) {
-        return $http.get(Settings.getSyncingServerUrl() + 'poets/' + $poetId + '/poems');
+        return $http.get(Settings.getSyncingServerUrl() + 'poems/' + $poetId);
       },
       set: function (jsonArr) {
         poems = jsonArr;
