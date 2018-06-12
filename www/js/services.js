@@ -20,15 +20,15 @@ angular.module('starter.services', [])
   .factory('Poets', function ($http, $q, Settings, DataStore) {
     var poets = null;
     return {
-      all: function (forceReloadFromServer) {
+      all: function (forceReloadFromServer, lang) {
         reloadFromServer = forceReloadFromServer || false;
-        poets = DataStore.getObject('poets');
+        poets = DataStore.getObject('poets.' + lang);
         if (!reloadFromServer && poets !== null) {
           var defer = $q.defer();
           defer.resolve({"data": poets});
           return defer.promise;
         } else {
-          return $http.get(Settings.getSyncingServerUrl() + 'poets');
+          return $http.get(Settings.getSyncingServerUrl() + 'poets/' + lang);
         }
       },
       set: function (jsonArr) {

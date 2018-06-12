@@ -74,12 +74,12 @@ angular.module('starter.controllers', [])
     poetsToDisplay = null;
     lastLoadedPoetsIndex = 0;
 
-    Poets.all().then(function (resp) {
+    Poets.all(false, $scope.selectedLang).then(function (resp) {
       console.log("poets: " + JSON.stringify(resp.data));
-      DataStore.setObject('poets', resp.data);
+      DataStore.setObject('poets.' + $scope.selectedLang, resp.data);
       poets = resp.data;
       Poets.set(poets);
-      poetsLang = poets.filter(function (poet) {
+      poetsLang = poets.items.filter(function (poet) {
         return poet.lang.toLowerCase() === $scope.selectedLang;
       });
       poetsToDisplay = poetsLang;
@@ -108,12 +108,12 @@ angular.module('starter.controllers', [])
     };
 
     $scope.doRefresh = function () {
-      Poets.all(true).then(function (resp) {
+      Poets.all(true, $scope.selectedLang).then(function (resp) {
         console.log("poets: " + JSON.stringify(resp.data));
-        DataStore.setObject('poets', resp.data);
+        DataStore.setObject('poets.' + $scope.selectedLang, resp.data);
         poets = resp.data;
         Poets.set(poets);
-        poetsLang = poets.filter(function (poet) {
+        poetsLang = poets.items.filter(function (poet) {
           return poet.lang.toLowerCase() === $scope.selectedLang;
         });
         poetsToDisplay = poetsLang;
@@ -127,7 +127,7 @@ angular.module('starter.controllers', [])
 
     $scope.$on('langChange', function (evt, newLang) {
       $scope.selectedLang = Settings.getLang();
-      poetsLang = poets.filter(function (poet) {
+      poetsLang = poets.items.filter(function (poet) {
         return poet.lang.toLowerCase() === $scope.selectedLang;
       });
       poetsToDisplay = poetsLang;
