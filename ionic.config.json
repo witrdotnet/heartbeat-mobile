@@ -1,7 +1,9 @@
 {
   "name": "deeweny-mobile",
   "app_id": "",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "ionic1",
   "watchPatterns": [
     "scss/**/*",
