@@ -1,0 +1,7 @@
+# serve
+
+ionic serve
+
+# build android apk
+
+ionic cordova build android
