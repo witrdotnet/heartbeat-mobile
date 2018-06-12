@@ -151,13 +151,13 @@ angular.module('starter.controllers', [])
     if (poems !== null) {
       console.log(JSON.stringify(poems));
       Poems.set(poems);
-      $scope.poems = poems;
+      $scope.poems = poems.items;
     } else {
       Poems.all($stateParams.poetId).then(function (resp) {
         console.log(JSON.stringify(resp.data));
         DataStore.setObject('poems_of_' + $stateParams.poetId, resp.data);
         Poems.set(resp.data);
-        $scope.poems = resp.data;
+        $scope.poems = resp.data.items;
       });
     }
 
@@ -166,7 +166,7 @@ angular.module('starter.controllers', [])
         console.log(JSON.stringify(resp.data));
         DataStore.setObject('poems_of_' + $stateParams.poetId, resp.data);
         Poems.set(resp.data);
-        $scope.poems = resp.data;
+        $scope.poems = resp.data.items;
       })
         .finally(function () {
           // Stop the ion-refresher from spinning

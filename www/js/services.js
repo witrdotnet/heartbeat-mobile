@@ -60,12 +60,12 @@ angular.module('starter.services', [])
         poems = jsonArr;
       },
       remove: function (poem) {
-        poems.splice(poems.indexOf(poem), 1);
+        poems.items.splice(poems.items.indexOf(poem), 1);
       },
       get: function (poemId) {
-        for (var i = 0; i < poems.length; i++) {
-          if (parseInt(poems[i].id) === parseInt(poemId)) {
-            return poems[i];
+        for (var i = 0; i < poems.items.length; i++) {
+          if (parseInt(poems.items[i].poemId) === parseInt(poemId)) {
+            return poems.items[i];
           }
         }
         alert('poem :( not found');
